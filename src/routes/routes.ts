@@ -1,9 +1,9 @@
 import { Router } from "express";
+import itemsRouter from "./items.routes";
 
 const routes = Router();
+routes.use(itemsRouter);
 
-routes.get('/', async (req, res) => {
-    return res.json({ message: 'hellow' });
-});
+routes.use('/items', itemsRouter);
 
 export default routes;
