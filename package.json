@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "serve": "ts-node-dev --inspect --ignore-watch node_modules src/server.ts",
-    "migrate": "npx knex --knexfile knexfile.ts migrate:latest"
+    "migrate": "npx knex --knexfile knexfile.ts migrate:latest",
+    "seed": "npx knex --knexfile knexfile.ts seed:run"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
