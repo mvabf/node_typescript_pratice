@@ -28,21 +28,30 @@ locationsRouter.post('/', async(req, res) => {
         state,
     };
 
-    const newIds = await db('locations').insert(location);
+    const transaction = await db.transaction();
 
-    const locationId = newIds[0];
+    const newIds = await transaction('locations').insert(location);
+
+    const location_id = newIds[0];
+
+    const validItems = await transaction('items').whereIn('id', items);
+
+    if (!(validItems.length == items.length)) 
+        return res.status(400).json({error: 'Item não pertece a categoria alguma!'});
 
     const locationItems = items.map((item_id: number) => {
         return {
             item_id,
-            location_id: locationId
+            location_id
         }
     });
 
-    await db('location_items').insert(locationItems);
+    await transaction('location_items').insert(locationItems);
+
+    await transaction.commit();
 
     return res.json({
-        id: locationId,
+        id: location_id,
         ...location
     });
 });
